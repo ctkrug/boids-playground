@@ -42,6 +42,16 @@ function bindFlockSize(state) {
   });
 }
 
+function bindWorldMode(state) {
+  const input = document.getElementById('wrapToggle');
+  if (!input) return;
+
+  input.checked = state.flock.params.wrap;
+  input.addEventListener('change', () => {
+    state.flock.params.wrap = input.checked;
+  });
+}
+
 function bindPlaybackControls(state, updateReadouts) {
   const pauseBtn = document.getElementById('pauseBtn');
   const stepBtn = document.getElementById('stepBtn');
@@ -137,6 +147,7 @@ function main() {
 
   bindSliders(state);
   bindFlockSize(state);
+  bindWorldMode(state);
   bindPointer(state, canvas);
   const updateReadouts = bindReadouts(state);
   bindPlaybackControls(state, updateReadouts);
