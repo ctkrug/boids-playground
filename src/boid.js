@@ -1,5 +1,10 @@
 import { add, sub, scale, length, limit, normalize, distance } from './vector.js';
 
+// Extra clearance added around an obstacle's own radius before a boid starts
+// steering away from it, so boids visibly curve around rather than grazing
+// the edge.
+const OBSTACLE_MARGIN = 30;
+
 export class Boid {
   constructor(x, y, vx, vy) {
     this.position = { x, y };
@@ -12,7 +17,7 @@ export class Boid {
    * of nearby boids (cohesion). Each rule only considers neighbors within
    * `params.perceptionRadius` and is weighted independently.
    */
-  computeAcceleration(neighbors, params, pointer) {
+  computeAcceleration(neighbors, params, pointer, obstacles = []) {
     const separation = { x: 0, y: 0 };
     const alignment = { x: 0, y: 0 };
     const cohesion = { x: 0, y: 0 };
@@ -51,6 +56,7 @@ export class Boid {
     }
 
     this._applyPointer(steer, params, pointer);
+    this._applyObstacles(steer, params, obstacles);
 
     return limit(steer, params.maxForce);
   }
@@ -70,6 +76,25 @@ export class Boid {
     const dir = normalize(toPointer);
     steer.x += dir.x * params.pointerWeight * sign;
     steer.y += dir.y * params.pointerWeight * sign;
+  }
+
+  /**
+   * Pushes away from each obstacle whose avoidance radius (its own radius
+   * plus a fixed margin) the boid has entered, scaled by how deep into that
+   * radius it is — stronger the closer it gets — mutating `steer` in place.
+   */
+  _applyObstacles(steer, params, obstacles) {
+    for (const obstacle of obstacles) {
+      const away = sub(this.position, { x: obstacle.x, y: obstacle.y });
+      const d = length(away);
+      const avoidRadius = obstacle.radius + OBSTACLE_MARGIN;
+      if (d === 0 || d > avoidRadius) continue;
+
+      const dir = normalize(away);
+      const strength = ((avoidRadius - d) / avoidRadius) * params.obstacleWeight;
+      steer.x += dir.x * strength;
+      steer.y += dir.y * strength;
+    }
   }
 
   update(acceleration, params, bounds) {

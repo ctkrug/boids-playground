@@ -9,6 +9,7 @@ export const DEFAULT_PARAMS = {
   alignmentWeight: 1.0,
   cohesionWeight: 1.0,
   pointerWeight: 0.05,
+  obstacleWeight: 3,
   wrap: true,
 };
 
