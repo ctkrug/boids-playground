@@ -25,9 +25,9 @@ each should be small enough to land as one focused PR.
 
 ## Epic 3: Performance and presets
 
-- [ ] Replace the naive O(n²) neighbor search in `Flock.step()` with a spatial grid,
+- [x] Replace the naive O(n²) neighbor search in `Flock.step()` with a spatial grid,
       keeping the `Boid`/`Flock` public interface unchanged.
-- [ ] Benchmark and tune for 300+ boids at a steady 60fps on a mid-range laptop.
+- [x] Benchmark and tune for 300+ boids at a steady 60fps on a mid-range laptop.
 - [ ] Add a debug overlay that optionally renders each boid's perception radius and
       velocity vector.
 - [ ] Add named presets (e.g. "tight schooling fish", "loose starlings", "chaotic swarm")
