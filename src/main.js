@@ -1,5 +1,6 @@
 import { Flock } from './flock.js';
 import { drawFlock } from './render.js';
+import { FpsCounter } from './fps.js';
 
 const SLIDER_IDS = [
   'perceptionRadius',
@@ -41,7 +42,7 @@ function bindFlockSize(state) {
   });
 }
 
-function bindPlaybackControls(state) {
+function bindPlaybackControls(state, updateReadouts) {
   const pauseBtn = document.getElementById('pauseBtn');
   const stepBtn = document.getElementById('stepBtn');
   const resetBtn = document.getElementById('resetBtn');
@@ -57,6 +58,7 @@ function bindPlaybackControls(state) {
     stepBtn.addEventListener('click', () => {
       state.flock.step();
       state.draw();
+      updateReadouts(performance.now());
     });
   }
 
@@ -65,6 +67,18 @@ function bindPlaybackControls(state) {
       state.flock = new Flock(state.flock.boids.length, state.bounds, state.flock.params);
     });
   }
+}
+
+function bindReadouts(state) {
+  const fpsReadout = document.getElementById('fpsReadout');
+  const countReadout = document.getElementById('countReadout');
+  const fpsCounter = new FpsCounter();
+
+  return (timestampMs) => {
+    const fps = fpsCounter.tick(timestampMs);
+    if (fpsReadout) fpsReadout.textContent = String(fps);
+    if (countReadout) countReadout.textContent = String(state.flock.boids.length);
+  };
 }
 
 function main() {
@@ -83,11 +97,13 @@ function main() {
 
   bindSliders(state);
   bindFlockSize(state);
-  bindPlaybackControls(state);
+  const updateReadouts = bindReadouts(state);
+  bindPlaybackControls(state, updateReadouts);
 
-  function loop() {
+  function loop(timestampMs) {
     if (state.running) state.flock.step();
     state.draw();
+    updateReadouts(timestampMs);
     requestAnimationFrame(loop);
   }
 
