@@ -16,7 +16,12 @@ const SLIDER_IDS = [
   'pointerWeight',
 ];
 
-function bindSliders(state) {
+/**
+ * Writes the flock's current param values into the slider inputs/outputs
+ * without touching their event listeners — used both at startup and after
+ * a preset overwrites multiple params at once.
+ */
+function syncSliderInputs(state) {
   for (const id of SLIDER_IDS) {
     const input = document.getElementById(id);
     const output = document.getElementById(`${id}Value`);
@@ -24,6 +29,16 @@ function bindSliders(state) {
 
     input.value = state.flock.params[id];
     if (output) output.textContent = input.value;
+  }
+}
+
+function bindSliders(state) {
+  syncSliderInputs(state);
+
+  for (const id of SLIDER_IDS) {
+    const input = document.getElementById(id);
+    const output = document.getElementById(`${id}Value`);
+    if (!input) continue;
 
     input.addEventListener('input', () => {
       state.flock.params[id] = Number(input.value);
