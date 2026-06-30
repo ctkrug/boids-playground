@@ -31,3 +31,17 @@ describe('Flock.setSize', () => {
     expect(flock.boids).toHaveLength(6);
   });
 });
+
+describe('Flock.step', () => {
+  it('steers a lone boid toward an active attract pointer', () => {
+    const flock = new Flock(1, BOUNDS, { pointerWeight: 0.5 });
+    const boid = flock.boids[0];
+    boid.position = { x: 400, y: 300 };
+    boid.velocity = { x: 0, y: 0 };
+    const pointer = { active: true, mode: 'attract', position: { x: 500, y: 300 } };
+
+    flock.step(pointer);
+
+    expect(boid.velocity.x).toBeGreaterThan(0);
+  });
+});
