@@ -81,7 +81,27 @@ function bindPlaybackControls(state, updateReadouts) {
 
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      state.flock = new Flock(state.flock.boids.length, state.bounds, state.flock.params);
+      state.flock = new Flock(
+        state.flock.boids.length,
+        state.bounds,
+        state.flock.params,
+        state.flock.obstacles
+      );
+    });
+  }
+}
+
+function bindObstacles(state, canvas) {
+  const clearBtn = document.getElementById('clearObstaclesBtn');
+
+  canvas.addEventListener('click', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    state.flock.addObstacle(event.clientX - rect.left, event.clientY - rect.top);
+  });
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      state.flock.clearObstacles();
     });
   }
 }
@@ -163,6 +183,7 @@ function main() {
   bindFlockSize(state);
   bindWorldMode(state);
   bindPointer(state, canvas);
+  bindObstacles(state, canvas);
   const updateReadouts = bindReadouts(state);
   bindPlaybackControls(state, updateReadouts);
 

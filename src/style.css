@@ -69,12 +69,18 @@ canvas {
   gap: 0.5rem;
 }
 
+.panel-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
 .panel-buttons {
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.panel-buttons button {
+.panel-group button {
   flex: 1;
   padding: 0.4rem 0.6rem;
   background: #334155;
@@ -85,7 +91,7 @@ canvas {
   font-size: 0.85rem;
 }
 
-.panel-buttons button:hover {
+.panel-group button:hover {
   background: #475569;
 }
 
