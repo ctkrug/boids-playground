@@ -1,4 +1,4 @@
-import { add, sub, scale, limit, normalize, distance } from './vector.js';
+import { add, sub, scale, length, limit, normalize, distance } from './vector.js';
 
 export class Boid {
   constructor(x, y, vx, vy) {
@@ -12,7 +12,7 @@ export class Boid {
    * of nearby boids (cohesion). Each rule only considers neighbors within
    * `params.perceptionRadius` and is weighted independently.
    */
-  computeAcceleration(neighbors, params) {
+  computeAcceleration(neighbors, params, pointer) {
     const separation = { x: 0, y: 0 };
     const alignment = { x: 0, y: 0 };
     const cohesion = { x: 0, y: 0 };
@@ -50,7 +50,26 @@ export class Boid {
         cohesionForce.y * params.cohesionWeight,
     };
 
+    this._applyPointer(steer, params, pointer);
+
     return limit(steer, params.maxForce);
+  }
+
+  /**
+   * Steers toward (attract) or away from (repel) an active pointer target,
+   * mutating `steer` in place. A no-op when there is no active pointer.
+   */
+  _applyPointer(steer, params, pointer) {
+    if (!pointer || !pointer.active) return;
+
+    const toPointer = sub(pointer.position, this.position);
+    const d = length(toPointer);
+    if (d === 0) return;
+
+    const sign = pointer.mode === 'repel' ? -1 : 1;
+    const dir = normalize(toPointer);
+    steer.x += dir.x * params.pointerWeight * sign;
+    steer.y += dir.y * params.pointerWeight * sign;
   }
 
   update(acceleration, params, bounds) {
