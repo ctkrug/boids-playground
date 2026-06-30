@@ -14,7 +14,7 @@ locked-down toys with no controls, or buried inside a game-engine project. This 
 page you can open, drag some sliders, and immediately see cause and effect — and the entire
 simulation is small enough to read end to end in one sitting.
 
-## Planned features
+## Features
 
 - Classic three-rule flocking: separation, alignment, cohesion, each independently weighted.
 - Live tunable parameters (sliders): perception radius, max speed, max force, per-rule weights,
@@ -22,9 +22,9 @@ simulation is small enough to read end to end in one sitting.
 - Mouse/touch interaction: attract, repel, or drop obstacles the flock must steer around.
 - Toroidal (wrap-around) and bounded (steer-away) world modes.
 - Spatial partitioning (grid) for neighbor queries so the simulation stays smooth at high
-  flock counts.
+  flock counts (300+ boids).
 - Visual debug overlay: optional rendering of each boid's perception radius and velocity vector.
-- Preset configurations (e.g. "tight schooling fish", "loose starlings", "chaotic swarm").
+- Preset configurations ("tight schooling fish", "loose starlings", "chaotic swarm").
 - Pause/step/reset controls and an FPS readout.
 
 ## Stack
@@ -38,8 +38,8 @@ simulation is small enough to read end to end in one sitting.
 
 ## Status
 
-Core simulation and control panel are functional — see [`docs/VISION.md`](docs/VISION.md) for
-the design and [`docs/BACKLOG.md`](docs/BACKLOG.md) for the remaining build order.
+All planned v1 functionality is implemented — see [`docs/VISION.md`](docs/VISION.md) for the
+design and [`docs/BACKLOG.md`](docs/BACKLOG.md) for the story-by-story build order.
 
 ## Running locally
 
@@ -52,6 +52,8 @@ npx serve .
 
 ## Using the control panel
 
+- **Presets** — pick a named configuration ("tight schooling fish", "loose starlings", "chaotic
+  swarm") to set every rule slider at once; you can keep tweaking from there.
 - **Rules** — perception radius, max speed, max force, and the separation/alignment/cohesion
   weights are all live sliders; changes apply on the next simulation frame.
 - **Flock** — the flock-size slider grows or shrinks the population without resetting existing
@@ -59,8 +61,12 @@ npx serve .
 - **Pointer** — hover (or touch) the canvas to attract or repel the flock toward the cursor;
   switch modes (or turn it off) from the dropdown, and tune the pull/push strength with the
   pointer-strength slider.
+- **Display** — "Show debug overlay" renders each boid's perception radius and velocity vector,
+  useful for seeing exactly what each rule is reacting to.
+- **Obstacles** — click anywhere on the canvas to drop a static obstacle the flock steers
+  around; "Clear obstacles" removes them all.
 - **Playback** — Pause/Resume stops and restarts the simulation loop, Step advances exactly one
-  frame while paused, and Reset rebuilds the flock at the current size and params.
+  frame while paused, and Reset rebuilds the flock at the current size, params, and obstacles.
 - All control panel values persist to `localStorage`, so a reload restores your last
   configuration.
 
