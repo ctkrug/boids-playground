@@ -45,4 +45,25 @@ describe('Boid', () => {
     expect(boid.position.x).toBeLessThan(800);
     expect(boid.position.x).toBeGreaterThanOrEqual(0);
   });
+
+  it('steers toward an active attract pointer', () => {
+    const boid = new Boid(0, 0, 0, 0);
+    const pointer = { active: true, mode: 'attract', position: { x: 100, y: 0 } };
+    const accel = boid.computeAcceleration([boid], { ...PARAMS, pointerWeight: 0.2 }, pointer);
+    expect(accel.x).toBeGreaterThan(0);
+  });
+
+  it('steers away from an active repel pointer', () => {
+    const boid = new Boid(0, 0, 0, 0);
+    const pointer = { active: true, mode: 'repel', position: { x: 100, y: 0 } };
+    const accel = boid.computeAcceleration([boid], { ...PARAMS, pointerWeight: 0.2 }, pointer);
+    expect(accel.x).toBeLessThan(0);
+  });
+
+  it('ignores an inactive pointer', () => {
+    const boid = new Boid(0, 0, 0, 0);
+    const pointer = { active: false, mode: 'attract', position: { x: 100, y: 0 } };
+    const accel = boid.computeAcceleration([boid], { ...PARAMS, pointerWeight: 0.2 }, pointer);
+    expect(accel).toEqual({ x: 0, y: 0 });
+  });
 });
