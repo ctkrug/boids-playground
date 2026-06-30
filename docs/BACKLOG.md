@@ -32,5 +32,5 @@ each should be small enough to land as one focused PR.
       velocity vector.
 - [x] Add named presets (e.g. "tight schooling fish", "loose starlings", "chaotic swarm")
       that set all sliders at once via a dropdown.
-- [ ] Add unit tests for alignment and cohesion edge cases (single neighbor, all neighbors
+- [x] Add unit tests for alignment and cohesion edge cases (single neighbor, all neighbors
       at the same position, neighbors exactly at the perception-radius boundary).
