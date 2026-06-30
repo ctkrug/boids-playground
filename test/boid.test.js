@@ -99,3 +99,59 @@ describe('Boid', () => {
     expect(Math.abs(closeAccel.x)).toBeGreaterThan(Math.abs(farAccel.x));
   });
 });
+
+describe('alignment and cohesion edge cases', () => {
+  const ISOLATED = { ...PARAMS, maxForce: 1000, separationWeight: 0 };
+
+  it('alignment with a single neighbor matches that neighbor\'s velocity exactly', () => {
+    const boid = new Boid(0, 0, 0, 0);
+    const neighbor = new Boid(10, 0, 2, 3);
+    const params = { ...ISOLATED, alignmentWeight: 1, cohesionWeight: 0 };
+
+    const accel = boid.computeAcceleration([boid, neighbor], params);
+
+    expect(accel.x).toBeCloseTo(2);
+    expect(accel.y).toBeCloseTo(3);
+  });
+
+  it('cohesion with a single neighbor steers exactly toward its position', () => {
+    const boid = new Boid(0, 0, 0, 0);
+    const neighbor = new Boid(10, 20, 0, 0);
+    const params = { ...ISOLATED, alignmentWeight: 0, cohesionWeight: 1 };
+
+    const accel = boid.computeAcceleration([boid, neighbor], params);
+
+    expect(accel.x).toBeCloseTo(10);
+    expect(accel.y).toBeCloseTo(20);
+  });
+
+  it('ignores neighbors that occupy the exact same position (zero distance)', () => {
+    const boid = new Boid(5, 5, 0, 0);
+    const coincident = [new Boid(5, 5, 1, 0), new Boid(5, 5, 0, 1)];
+    const params = { ...ISOLATED, alignmentWeight: 1, cohesionWeight: 1 };
+
+    const accel = boid.computeAcceleration([boid, ...coincident], params);
+
+    expect(accel).toEqual({ x: 0, y: 0 });
+  });
+
+  it('includes a neighbor sitting exactly on the perception-radius boundary', () => {
+    const boid = new Boid(0, 0, 0, 0);
+    const onBoundary = new Boid(PARAMS.perceptionRadius, 0, 1, 0);
+    const params = { ...ISOLATED, alignmentWeight: 1, cohesionWeight: 0 };
+
+    const accel = boid.computeAcceleration([boid, onBoundary], params);
+
+    expect(accel.x).toBeCloseTo(1);
+  });
+
+  it('excludes a neighbor just beyond the perception-radius boundary', () => {
+    const boid = new Boid(0, 0, 0, 0);
+    const justBeyond = new Boid(PARAMS.perceptionRadius + 0.01, 0, 1, 0);
+    const params = { ...ISOLATED, alignmentWeight: 1, cohesionWeight: 0 };
+
+    const accel = boid.computeAcceleration([boid, justBeyond], params);
+
+    expect(accel).toEqual({ x: 0, y: 0 });
+  });
+});
