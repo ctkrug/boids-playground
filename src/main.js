@@ -1,5 +1,5 @@
 import { Flock, DEFAULT_PARAMS } from './flock.js';
-import { drawFlock } from './render.js';
+import { drawFlock, drawDebugOverlay } from './render.js';
 import { FpsCounter } from './fps.js';
 import { loadParams, saveParams } from './storage.js';
 
@@ -145,6 +145,16 @@ function bindPointer(state, canvas) {
   });
 }
 
+function bindDebugOverlay(state) {
+  const input = document.getElementById('debugOverlay');
+  if (!input) return;
+
+  state.debug = input.checked;
+  input.addEventListener('change', () => {
+    state.debug = input.checked;
+  });
+}
+
 function bindReadouts(state) {
   const fpsReadout = document.getElementById('fpsReadout');
   const countReadout = document.getElementById('countReadout');
@@ -169,9 +179,11 @@ function main() {
     bounds,
     flock: new Flock(storedSize, bounds, storedParams),
     running: true,
+    debug: false,
     pointer: { active: false, mode: 'attract', position: { x: 0, y: 0 } },
     draw() {
       drawFlock(ctx, this.flock);
+      if (this.debug) drawDebugOverlay(ctx, this.flock);
     },
     persist() {
       saveParams(window.localStorage, this.flock.params);
@@ -184,6 +196,7 @@ function main() {
   bindWorldMode(state);
   bindPointer(state, canvas);
   bindObstacles(state, canvas);
+  bindDebugOverlay(state);
   const updateReadouts = bindReadouts(state);
   bindPlaybackControls(state, updateReadouts);
 
