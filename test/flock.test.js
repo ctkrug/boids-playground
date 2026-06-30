@@ -44,4 +44,42 @@ describe('Flock.step', () => {
 
     expect(boid.velocity.x).toBeGreaterThan(0);
   });
+
+  it('steers a lone boid away from a nearby obstacle', () => {
+    const flock = new Flock(1, BOUNDS, { obstacleWeight: 5, maxForce: 1 });
+    const boid = flock.boids[0];
+    boid.position = { x: 400, y: 300 };
+    boid.velocity = { x: 0, y: 0 };
+    flock.addObstacle(415, 300, 10);
+
+    flock.step({ active: false });
+
+    expect(boid.velocity.x).toBeLessThan(0);
+  });
+});
+
+describe('Flock obstacles', () => {
+  it('starts with no obstacles by default', () => {
+    const flock = new Flock(1, BOUNDS);
+    expect(flock.obstacles).toEqual([]);
+  });
+
+  it('accepts initial obstacles in the constructor', () => {
+    const flock = new Flock(1, BOUNDS, {}, [{ x: 1, y: 2, radius: 3 }]);
+    expect(flock.obstacles).toEqual([{ x: 1, y: 2, radius: 3 }]);
+  });
+
+  it('addObstacle appends an obstacle with a default radius', () => {
+    const flock = new Flock(1, BOUNDS);
+    flock.addObstacle(100, 200);
+    expect(flock.obstacles).toHaveLength(1);
+    expect(flock.obstacles[0]).toMatchObject({ x: 100, y: 200 });
+  });
+
+  it('clearObstacles empties the obstacle list', () => {
+    const flock = new Flock(1, BOUNDS);
+    flock.addObstacle(100, 200);
+    flock.clearObstacles();
+    expect(flock.obstacles).toEqual([]);
+  });
 });
