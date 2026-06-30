@@ -1,4 +1,5 @@
 const BOID_SIZE = 6;
+const OBSTACLE_COLOR = '#f87171';
 
 export function drawBoid(ctx, boid) {
   const angle = Math.atan2(boid.velocity.y, boid.velocity.x);
@@ -15,8 +16,18 @@ export function drawBoid(ctx, boid) {
   ctx.restore();
 }
 
+export function drawObstacle(ctx, obstacle) {
+  ctx.beginPath();
+  ctx.arc(obstacle.x, obstacle.y, obstacle.radius, 0, Math.PI * 2);
+  ctx.fillStyle = OBSTACLE_COLOR;
+  ctx.fill();
+}
+
 export function drawFlock(ctx, flock) {
   ctx.clearRect(0, 0, flock.bounds.width, flock.bounds.height);
+  for (const obstacle of flock.obstacles) {
+    drawObstacle(ctx, obstacle);
+  }
   for (const boid of flock.boids) {
     drawBoid(ctx, boid);
   }
