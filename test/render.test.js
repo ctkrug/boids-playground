@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { drawBoid, drawObstacle, drawFlock } from '../src/render.js';
+import { drawBoid, drawObstacle, drawFlock, drawDebugOverlay } from '../src/render.js';
 
 function fakeCtx() {
   return {
@@ -12,6 +12,7 @@ function fakeCtx() {
     lineTo: vi.fn(),
     closePath: vi.fn(),
     fill: vi.fn(),
+    stroke: vi.fn(),
     arc: vi.fn(),
     clearRect: vi.fn(),
   };
@@ -66,5 +67,34 @@ describe('drawFlock', () => {
 
     expect(ctx.arc).not.toHaveBeenCalled();
     expect(ctx.translate).not.toHaveBeenCalled();
+  });
+});
+
+describe('drawDebugOverlay', () => {
+  it('draws a perception-radius circle and a velocity line per boid', () => {
+    const ctx = fakeCtx();
+    const flock = {
+      params: { perceptionRadius: 50 },
+      boids: [
+        { position: { x: 0, y: 0 }, velocity: { x: 1, y: 0 } },
+        { position: { x: 10, y: 10 }, velocity: { x: 0, y: -2 } },
+      ],
+    };
+
+    drawDebugOverlay(ctx, flock);
+
+    expect(ctx.arc).toHaveBeenCalledTimes(2);
+    expect(ctx.arc).toHaveBeenCalledWith(0, 0, 50, 0, Math.PI * 2);
+    expect(ctx.moveTo).toHaveBeenCalledTimes(2);
+    expect(ctx.lineTo).toHaveBeenCalledWith(10, 0);
+    expect(ctx.stroke).toHaveBeenCalledTimes(4);
+  });
+
+  it('draws nothing for an empty flock', () => {
+    const ctx = fakeCtx();
+    drawDebugOverlay(ctx, { params: { perceptionRadius: 50 }, boids: [] });
+
+    expect(ctx.arc).not.toHaveBeenCalled();
+    expect(ctx.stroke).not.toHaveBeenCalled();
   });
 });
