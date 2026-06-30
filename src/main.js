@@ -2,6 +2,7 @@ import { Flock, DEFAULT_PARAMS } from './flock.js';
 import { drawFlock, drawDebugOverlay } from './render.js';
 import { FpsCounter } from './fps.js';
 import { loadParams, saveParams } from './storage.js';
+import { PRESETS, applyPreset } from './presets.js';
 
 const SIZE_STORAGE_KEY = 'boids-playground:size';
 const DEFAULT_FLOCK_SIZE = 150;
@@ -46,6 +47,26 @@ function bindSliders(state) {
       state.persist();
     });
   }
+}
+
+function bindPresets(state) {
+  const select = document.getElementById('presetSelect');
+  if (!select) return;
+
+  for (const [key, preset] of Object.entries(PRESETS)) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = preset.label;
+    select.appendChild(option);
+  }
+
+  select.addEventListener('change', () => {
+    if (!select.value) return;
+    state.flock.params = applyPreset(state.flock.params, select.value);
+    syncSliderInputs(state);
+    state.persist();
+    select.value = '';
+  });
 }
 
 function bindFlockSize(state) {
@@ -207,6 +228,7 @@ function main() {
   };
 
   bindSliders(state);
+  bindPresets(state);
   bindFlockSize(state);
   bindWorldMode(state);
   bindPointer(state, canvas);
