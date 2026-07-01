@@ -206,12 +206,14 @@ function bindDebugOverlay(state) {
 function bindReadouts(state) {
   const fpsReadout = document.getElementById('fpsReadout');
   const countReadout = document.getElementById('countReadout');
+  const obstacleReadout = document.getElementById('obstacleReadout');
   const fpsCounter = new FpsCounter();
 
   return (timestampMs) => {
     const fps = fpsCounter.tick(timestampMs);
     if (fpsReadout) fpsReadout.textContent = String(fps);
     if (countReadout) countReadout.textContent = String(state.flock.boids.length);
+    if (obstacleReadout) obstacleReadout.textContent = String(state.flock.obstacles.length);
   };
 }
 
