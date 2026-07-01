@@ -36,6 +36,21 @@ describe('storage', () => {
     expect(loadParams(storage, DEFAULTS)).toEqual(DEFAULTS);
   });
 
+  it('falls back to defaults when the stored value parses to null', () => {
+    const storage = fakeStorage({ 'boids-playground:params': 'null' });
+    expect(loadParams(storage, DEFAULTS)).toEqual(DEFAULTS);
+  });
+
+  it('falls back to defaults when the stored value parses to a non-object', () => {
+    const storage = fakeStorage({ 'boids-playground:params': '42' });
+    expect(loadParams(storage, DEFAULTS)).toEqual(DEFAULTS);
+  });
+
+  it('falls back to defaults when the stored value parses to an array', () => {
+    const storage = fakeStorage({ 'boids-playground:params': '[1,2,3]' });
+    expect(loadParams(storage, DEFAULTS)).toEqual(DEFAULTS);
+  });
+
   it('round-trips saved values through loadParams', () => {
     const storage = fakeStorage();
     saveParams(storage, { ...DEFAULTS, maxSpeed: 7 });

@@ -17,6 +17,8 @@ export function loadParams(storage, defaults) {
     return result;
   }
 
+  if (typeof parsed !== 'object' || parsed === null) return result;
+
   for (const key of Object.keys(defaults)) {
     if (typeof parsed[key] === typeof defaults[key]) {
       result[key] = parsed[key];
