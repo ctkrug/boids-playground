@@ -1,7 +1,7 @@
 import { Flock, DEFAULT_PARAMS } from './flock.js';
 import { drawFlock, drawDebugOverlay } from './render.js';
 import { FpsCounter } from './fps.js';
-import { loadParams, saveParams } from './storage.js';
+import { loadParams, saveParams, loadSize, saveSize } from './storage.js';
 import { PRESETS, applyPreset } from './presets.js';
 
 const SIZE_STORAGE_KEY = 'boids-playground:size';
@@ -211,8 +211,7 @@ function main() {
   const bounds = { width: canvas.width, height: canvas.height };
 
   const storedParams = loadParams(window.localStorage, DEFAULT_PARAMS);
-  const parsedSize = Number(window.localStorage.getItem(SIZE_STORAGE_KEY));
-  const storedSize = Number.isFinite(parsedSize) && parsedSize > 0 ? parsedSize : DEFAULT_FLOCK_SIZE;
+  const storedSize = loadSize(window.localStorage, SIZE_STORAGE_KEY, DEFAULT_FLOCK_SIZE);
 
   const state = {
     bounds,
@@ -226,11 +225,7 @@ function main() {
     },
     persist() {
       saveParams(window.localStorage, this.flock.params);
-      try {
-        window.localStorage.setItem(SIZE_STORAGE_KEY, String(this.flock.boids.length));
-      } catch {
-        // Persistence is best-effort; see saveParams for why this can throw.
-      }
+      saveSize(window.localStorage, SIZE_STORAGE_KEY, this.flock.boids.length);
     },
   };
 
