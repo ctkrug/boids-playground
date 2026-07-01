@@ -71,11 +71,12 @@ python3 -m http.server 8000
   pointer-strength slider.
 - **Display** — "Show debug overlay" renders each boid's perception radius and velocity vector,
   useful for seeing exactly what each rule is reacting to.
-- **Obstacles** — click anywhere on the canvas to drop a static obstacle the flock steers
-  around; the avoidance-strength slider controls how hard boids push away from them, and
-  "Clear obstacles" removes them all.
+- **Obstacles** — click (or tap) anywhere on the canvas to drop a static obstacle the flock
+  steers around; the avoidance-strength slider controls how hard boids push away from them, and
+  "Clear obstacles" removes them all. The obstacle count is shown alongside fps and boid count.
 - **Playback** — Pause/Resume stops and restarts the simulation loop, Step advances exactly one
   frame while paused, and Reset rebuilds the flock at the current size, params, and obstacles.
+  Press Space to toggle Pause/Resume from anywhere except a focused control.
 - All control panel values persist to `localStorage`, so a reload restores your last
   configuration.
 
