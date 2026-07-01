@@ -49,4 +49,11 @@ describe('SpatialGrid', () => {
     const grid = SpatialGrid.buildFor([boid], NaN);
     expect(grid.queryNear({ x: 5, y: 5 }, 10)).toContain(boid);
   });
+
+  it('buckets a boid sitting exactly on a cell boundary into the higher cell', () => {
+    const grid = new SpatialGrid(50);
+    grid.insert({ position: { x: 50, y: 0 } });
+    expect(grid.cells.has('1,0')).toBe(true);
+    expect(grid.cells.has('0,0')).toBe(false);
+  });
 });
