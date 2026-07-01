@@ -42,10 +42,12 @@ there is no separate UI state to keep in sync.
 - **Compute-then-apply update order.** Every boid's acceleration is computed from a single
   shared snapshot of the flock before any boid's position is updated, so behavior doesn't
   depend on iteration order (a classic source of subtle bugs in flocking implementations).
-- **Naive O(n²) neighbor search to start, spatial grid as a planned upgrade.** Correctness
-  and readability come first; the `Flock`/`Boid` interface is designed so a grid-based
-  neighbor query can replace the inner loop in `Flock.step()` without touching `Boid` at
-  all.
+- **Correctness first, then a spatial grid for speed.** The flocking rules were written
+  against a naive O(n²) neighbor scan so the behavior could be verified in isolation; the
+  `Flock`/`Boid` interface was designed so a grid-based neighbor query could later replace
+  the inner loop in `Flock.step()` without touching `Boid` at all. That upgrade has shipped
+  — `Flock.step()` now buckets boids into a `SpatialGrid` (`src/grid.js`) and `Boid` is
+  unchanged, exactly as planned.
 - **No build step required to run it.** `src/index.html` works by serving the repo with any
   static file server — no bundler, no compile step. (It can't be opened directly via
   `file://`: browsers block ES module imports under that protocol, which `main.js` relies
