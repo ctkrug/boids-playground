@@ -43,12 +43,15 @@ design and [`docs/BACKLOG.md`](docs/BACKLOG.md) for the story-by-story build ord
 
 ## Running locally
 
-Open `src/index.html` directly in a browser, or serve the repo root with any static file
-server:
+`main.js` is loaded as an ES module, which browsers refuse to fetch over `file://` (a CORS
+restriction), so opening `src/index.html` directly won't work. Serve the repo root with any
+static file server instead:
 
 ```sh
 npx serve .
 ```
+
+Then open the printed URL and navigate to `src/index.html`.
 
 ## Using the control panel
 
