@@ -209,7 +209,8 @@ function main() {
   const bounds = { width: canvas.width, height: canvas.height };
 
   const storedParams = loadParams(window.localStorage, DEFAULT_PARAMS);
-  const storedSize = Number(window.localStorage.getItem(SIZE_STORAGE_KEY)) || DEFAULT_FLOCK_SIZE;
+  const parsedSize = Number(window.localStorage.getItem(SIZE_STORAGE_KEY));
+  const storedSize = Number.isFinite(parsedSize) && parsedSize > 0 ? parsedSize : DEFAULT_FLOCK_SIZE;
 
   const state = {
     bounds,
