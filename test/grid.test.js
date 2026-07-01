@@ -36,4 +36,17 @@ describe('SpatialGrid', () => {
     const grid = SpatialGrid.buildFor([boid], 50);
     expect(grid.queryNear({ x: 0, y: 0 }, 150)).toContain(boid);
   });
+
+  it('clamps a non-positive cell size instead of dividing by zero', () => {
+    const boid = { position: { x: 5, y: 5 } };
+    const grid = SpatialGrid.buildFor([boid], 0);
+    expect(() => grid.queryNear({ x: 0, y: 0 }, 10)).not.toThrow();
+    expect(grid.queryNear({ x: 5, y: 5 }, 10)).toContain(boid);
+  });
+
+  it('clamps a non-finite cell size instead of producing NaN buckets', () => {
+    const boid = { position: { x: 5, y: 5 } };
+    const grid = SpatialGrid.buildFor([boid], NaN);
+    expect(grid.queryNear({ x: 5, y: 5 }, 10)).toContain(boid);
+  });
 });
