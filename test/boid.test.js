@@ -102,6 +102,15 @@ describe('Boid', () => {
     expect(accel).toEqual({ x: 0, y: 0 });
   });
 
+  it('nets out opposing forces from obstacles on either side', () => {
+    const boid = new Boid(0, 0, 0, 0);
+    const left = { x: -15, y: 0, radius: 5 };
+    const right = { x: 15, y: 0, radius: 5 };
+    const accel = boid.computeAcceleration([boid], PARAMS, null, [left, right]);
+    expect(accel.x).toBeCloseTo(0);
+    expect(accel.y).toBeCloseTo(0);
+  });
+
   it('steers harder away from an obstacle it is deeper inside', () => {
     const params = { ...PARAMS, maxForce: 100 };
     const closeBoid = new Boid(0, 0, 0, 0);
