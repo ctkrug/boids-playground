@@ -48,6 +48,12 @@ describe('Flock.setSize', () => {
     flock.setSize(NaN);
     expect(flock.boids).toHaveLength(6);
   });
+
+  it('grows a flock that started with zero boids', () => {
+    const flock = new Flock(0, BOUNDS);
+    flock.setSize(5);
+    expect(flock.boids).toHaveLength(5);
+  });
 });
 
 describe('Flock.step', () => {
