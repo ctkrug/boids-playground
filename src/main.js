@@ -15,6 +15,7 @@ const SLIDER_IDS = [
   'alignmentWeight',
   'cohesionWeight',
   'pointerWeight',
+  'obstacleWeight',
 ];
 
 /**
