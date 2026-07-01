@@ -51,6 +51,13 @@ describe('storage', () => {
     expect(loadParams(storage, DEFAULTS)).toEqual(DEFAULTS);
   });
 
+  it('ignores stored keys that are not part of defaults', () => {
+    const storage = fakeStorage({
+      'boids-playground:params': JSON.stringify({ maxSpeed: 5, evilKey: 'injected' }),
+    });
+    expect(loadParams(storage, DEFAULTS)).toEqual({ ...DEFAULTS, maxSpeed: 5 });
+  });
+
   it('round-trips saved values through loadParams', () => {
     const storage = fakeStorage();
     saveParams(storage, { ...DEFAULTS, maxSpeed: 7 });
