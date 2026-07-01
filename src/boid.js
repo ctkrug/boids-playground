@@ -102,8 +102,12 @@ export class Boid {
     this.position = add(this.position, this.velocity);
 
     if (params.wrap) {
-      this.position.x = ((this.position.x % bounds.width) + bounds.width) % bounds.width;
-      this.position.y = ((this.position.y % bounds.height) + bounds.height) % bounds.height;
+      this.position.x =
+        bounds.width > 0 ? ((this.position.x % bounds.width) + bounds.width) % bounds.width : 0;
+      this.position.y =
+        bounds.height > 0
+          ? ((this.position.y % bounds.height) + bounds.height) % bounds.height
+          : 0;
     } else {
       if (this.position.x < 0 || this.position.x > bounds.width) this.velocity.x *= -1;
       if (this.position.y < 0 || this.position.y > bounds.height) this.velocity.y *= -1;

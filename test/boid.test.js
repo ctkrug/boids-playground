@@ -47,6 +47,19 @@ describe('Boid', () => {
     expect(boid.position.x).toBeGreaterThanOrEqual(0);
   });
 
+  it('update() does not produce NaN position when wrapping into zero-size bounds', () => {
+    const boid = new Boid(10, 10, 1, 1);
+    boid.update({ x: 0, y: 0 }, PARAMS, { width: 0, height: 0 });
+    expect(boid.position).toEqual({ x: 0, y: 0 });
+  });
+
+  it('update() bounces velocity off the edge when wrap is false', () => {
+    const boid = new Boid(799, 300, 3, 0);
+    boid.update({ x: 0, y: 0 }, { ...PARAMS, wrap: false }, { width: 800, height: 600 });
+    expect(boid.velocity.x).toBeLessThan(0);
+    expect(boid.position.x).toBe(800);
+  });
+
   it('steers toward an active attract pointer', () => {
     const boid = new Boid(0, 0, 0, 0);
     const pointer = { active: true, mode: 'attract', position: { x: 100, y: 0 } };
