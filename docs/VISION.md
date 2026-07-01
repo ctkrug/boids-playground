@@ -46,9 +46,10 @@ there is no separate UI state to keep in sync.
   and readability come first; the `Flock`/`Boid` interface is designed so a grid-based
   neighbor query can replace the inner loop in `Flock.step()` without touching `Boid` at
   all.
-- **No build step required to run it.** `src/index.html` works by double-clicking it or
-  serving the repo with any static file server. A bundler isn't ruled out later, but v1
-  ships without one.
+- **No build step required to run it.** `src/index.html` works by serving the repo with any
+  static file server — no bundler, no compile step. (It can't be opened directly via
+  `file://`: browsers block ES module imports under that protocol, which `main.js` relies
+  on.) A bundler isn't ruled out later, but v1 ships without one.
 
 ## What "v1 done" looks like
 
