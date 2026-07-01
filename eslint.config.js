@@ -1,4 +1,10 @@
+const rules = {
+  'no-unused-vars': 'error',
+  'no-undef': 'error',
+};
+
 export default [
+  { ignores: ['site/**'] },
   {
     files: ['src/**/*.js', 'test/**/*.js'],
     languageOptions: {
@@ -11,9 +17,18 @@ export default [
         performance: 'readonly',
       },
     },
-    rules: {
-      'no-unused-vars': 'error',
-      'no-undef': 'error',
+    rules,
+  },
+  {
+    // Node build/tooling scripts, not shipped to the browser.
+    files: ['build.js', 'scripts/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: {
+        process: 'readonly',
+      },
     },
+    rules,
   },
 ];
