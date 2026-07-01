@@ -81,6 +81,13 @@ describe('Boid', () => {
     expect(accel).toEqual({ x: 0, y: 0 });
   });
 
+  it('excludes every neighbor when perceptionRadius is zero', () => {
+    const boid = new Boid(0, 0, 0, 0);
+    const neighbor = new Boid(1, 0, 1, 0);
+    const accel = boid.computeAcceleration([boid, neighbor], { ...PARAMS, perceptionRadius: 0 });
+    expect(accel).toEqual({ x: 0, y: 0 });
+  });
+
   it('steers away from a nearby obstacle', () => {
     const boid = new Boid(0, 0, 0, 0);
     const obstacle = { x: 20, y: 0, radius: 10 };
