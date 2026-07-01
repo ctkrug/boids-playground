@@ -51,7 +51,12 @@ static file server instead:
 npx serve .
 ```
 
-Then open the printed URL and navigate to `src/index.html`.
+Then open the printed URL and navigate to `src/index.html`. If you don't have Node's `npx`
+handy, any static file server works just as well — e.g. Python's built-in one:
+
+```sh
+python3 -m http.server 8000
+```
 
 ## Using the control panel
 
