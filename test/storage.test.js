@@ -95,6 +95,16 @@ describe('loadSize', () => {
     expect(loadSize(storage, 'size', 150)).toBe(150);
   });
 
+  it('floors a fractional stored size', () => {
+    const storage = fakeStorage({ size: '4.9' });
+    expect(loadSize(storage, 'size', 150)).toBe(4);
+  });
+
+  it('falls back when a fractional stored size floors to zero', () => {
+    const storage = fakeStorage({ size: '0.5' });
+    expect(loadSize(storage, 'size', 150)).toBe(150);
+  });
+
   it('falls back when reading throws', () => {
     const storage = {
       getItem: () => {
