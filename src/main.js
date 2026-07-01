@@ -224,7 +224,11 @@ function main() {
     },
     persist() {
       saveParams(window.localStorage, this.flock.params);
-      window.localStorage.setItem(SIZE_STORAGE_KEY, String(this.flock.boids.length));
+      try {
+        window.localStorage.setItem(SIZE_STORAGE_KEY, String(this.flock.boids.length));
+      } catch {
+        // Persistence is best-effort; see saveParams for why this can throw.
+      }
     },
   };
 
