@@ -9,6 +9,8 @@ HTML5 Canvas — no frameworks, no build step, no dependencies. Tune the classic
 alignment, and cohesion weights live and watch hundreds of agents reorganize themselves into
 flocks, streams, and swirling vortices in real time.
 
+**▶ [Play it live](https://apps.charliekrug.com/boids-playground/)**
+
 ![A frame of the boids flocking simulation: cyan arrowhead agents streaming around two red obstacles on a dark canvas](docs/sample-frame.svg)
 
 <sub>An actual frame rendered by the simulation — see [`scripts/render-sample.js`](scripts/render-sample.js).</sub>
