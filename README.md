@@ -1,5 +1,7 @@
 # Murmur
 
+**▶ Live demo — [apps.charliekrug.com/murmur](https://apps.charliekrug.com/murmur/)**
+
 *Watch three simple rules become a living flock.*
 
 [![CI](https://github.com/ctkrug/boids-playground/actions/workflows/ci.yml/badge.svg)](https://github.com/ctkrug/boids-playground/actions/workflows/ci.yml)
